@@ -1,0 +1,9 @@
+server:
+  port : ${SERVER_PORT:8081}
+spring:
+  application:
+    name: support-dinet-application-v1.0
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/dinetdb
+    username: admin
+    password: admin

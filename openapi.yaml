@@ -1,0 +1,161 @@
+openapi: 3.0.0
+info:
+  title: Application API
+  version: "1.0"  # Debe ser una cadena (string)
+  description: API documentation for managing applications and contacts.
+
+paths:
+  /applications:
+    post:
+      summary: Create a new application
+      description: Saves a new application along with its contacts
+      operationId: createApplication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationRequest'
+      responses:
+        '201':
+          description: Successfully created application
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+    get:
+      summary: Get all applications
+      description: Retrieves a list of all stored applications
+      operationId: getAllApplications
+      responses:
+        '200':
+          description: List of applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'
+
+  /applications/{code}:
+    get:
+      summary: Get application by code
+      description: Fetches an application using its unique code
+      operationId: getApplicationByCode
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Application details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationResponse'
+
+  /applications/{code}/contacts:
+    get:
+      summary: Get contacts by application code
+      description: Retrieves contacts associated with a specific application
+      operationId: getContactsByApplicationCode
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactResponse'
+
+components:
+  schemas:
+    ApplicationRequest:
+      type: object
+      properties:
+        brand:
+          type: string
+          example: "Nike"
+        requestType:
+          type: string
+          example: "New Subscription"
+        submissionDate:
+          type: string
+          format: date
+          example: "2025-03-18"
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactRequest'
+
+    Application:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "APP123"
+        brand:
+          type: string
+          example: "Nike"
+        requestType:
+          type: string
+          example: "New Subscription"
+        submissionDate:
+          type: string
+          format: date
+          example: "2025-03-18"
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+
+    ApplicationResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "APP123"
+        brand:
+          type: string
+          example: "Nike"
+        requestType:
+          type: string
+          example: "New Subscription"
+        submissionDate:
+          type: string
+          format: date
+          example: "2025-03-18"
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+
+    ContactRequest:
+      type: object
+      properties:
+        contactName:
+          type: string
+          example: "Jane Doe"
+        contactNumber:
+          type: string
+          pattern: "^[0-9]+$"
+          example: "+19876543210"
+
+    ContactResponse:
+      type: object
+      properties:
+        contactName:
+          type: string
+          example: "Jane Doe"
+        contactNumber:
+          type: string
+          example: "+19876543210"
